@@ -1,0 +1,94 @@
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuthStore } from './store/auth';
+import { LoginPage } from './features/auth/components/LoginPage';
+import { DashboardLayout } from './features/dashboard/components/DashboardLayout';
+import { ProjectView } from './features/projects/components/ProjectView';
+import { ChatView } from './features/chat/components/ChatView';
+
+// Protected Route wrapper
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const DashboardHome = () => {
+  return (
+    <>
+      <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">Overview</h2>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+          <h3 className="font-medium text-slate-500 dark:text-slate-400 mb-1 text-sm">My Tasks</h3>
+          <p className="text-3xl font-bold text-slate-900 dark:text-white">12</p>
+        </div>
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+          <h3 className="font-medium text-slate-500 dark:text-slate-400 mb-1 text-sm">Completed This Week</h3>
+          <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">24</p>
+        </div>
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+          <h3 className="font-medium text-slate-500 dark:text-slate-400 mb-1 text-sm">Upcoming Deadlines</h3>
+          <p className="text-3xl font-bold text-orange-500">3</p>
+        </div>
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+          <h3 className="font-medium text-slate-500 dark:text-slate-400 mb-1 text-sm">Unread Messages</h3>
+          <p className="text-3xl font-bold text-primary">5</p>
+        </div>
+      </div>
+    </>
+  );
+};
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route 
+        path="/" 
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <DashboardHome />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/projects/:projectId" 
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ProjectView />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/projects" 
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              {/* Fallback to demo project for testing */}
+              <Navigate to="/projects/demo-project-id" replace />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/messages" 
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ChatView />
+            </DashboardLayout>
+          </ProtectedRoute>
+        } 
+      />
+    </Routes>
+  );
+}
+
+export default App;
