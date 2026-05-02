@@ -1,7 +1,7 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { useMutation } from '@tanstack/react-query';
-import { api } from '../lib/api';
-import { useAuthStore } from '../store/auth';
+import { api } from "@/lib/api";
+import { useAuthStore } from '../../../store/auth';
 import { AuthResponse } from '@teamflow/shared';
 import { useNavigate } from 'react-router-dom';
 

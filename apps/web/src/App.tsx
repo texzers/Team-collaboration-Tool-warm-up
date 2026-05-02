@@ -1,20 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuthStore } from './store/auth';
-import { LoginPage } from './features/auth/components/LoginPage';
 import { DashboardLayout } from './features/dashboard/components/DashboardLayout';
 import { ProjectView } from './features/projects/components/ProjectView';
 import { ChatView } from './features/chat/components/ChatView';
-
-// Protected Route wrapper
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <>{children}</>;
-};
 
 const DashboardHome = () => {
   return (
@@ -45,48 +32,40 @@ const DashboardHome = () => {
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
       <Route 
         path="/" 
         element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <DashboardHome />
-            </DashboardLayout>
-          </ProtectedRoute>
+          <DashboardLayout>
+            <DashboardHome />
+          </DashboardLayout>
         } 
       />
       <Route 
         path="/projects/:projectId" 
         element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <ProjectView />
-            </DashboardLayout>
-          </ProtectedRoute>
+          <DashboardLayout>
+            <ProjectView />
+          </DashboardLayout>
         } 
       />
       <Route 
         path="/projects" 
         element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              {/* Fallback to demo project for testing */}
-              <Navigate to="/projects/demo-project-id" replace />
-            </DashboardLayout>
-          </ProtectedRoute>
+          <DashboardLayout>
+            <Navigate to="/projects/demo-project-id" replace />
+          </DashboardLayout>
         } 
       />
       <Route 
         path="/messages" 
         element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <ChatView />
-            </DashboardLayout>
-          </ProtectedRoute>
+          <DashboardLayout>
+            <ChatView />
+          </DashboardLayout>
         } 
       />
+      {/* Redirect any unknown routes to home */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
 });
 
 // Real app would use process.env.VITE_GOOGLE_CLIENT_ID
-const GOOGLE_CLIENT_ID = 'your-google-client-id.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '260753209101-t5boc7f6j1tkfnb7vqgbbgih5scrdei1.apps.googleusercontent.com';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
