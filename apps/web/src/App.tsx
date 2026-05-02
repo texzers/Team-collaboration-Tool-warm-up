@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { DashboardLayout } from './features/dashboard/components/DashboardLayout';
 import { ProjectView } from './features/projects/components/ProjectView';
 import { ChatView } from './features/chat/components/ChatView';
@@ -31,7 +32,8 @@ const DashboardHome = () => {
 
 function App() {
   return (
-    <Routes>
+    <ErrorBoundary>
+      <Routes>
       <Route 
         path="/" 
         element={
@@ -65,8 +67,9 @@ function App() {
         } 
       />
       {/* Redirect any unknown routes to home */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </ErrorBoundary>
   );
 }
 
